@@ -33,7 +33,7 @@ script:
   - KERNEL_DIR=$PWD/android_kernel_lenovo_A7010a48
   - ZIMAGE=$KERNEL_DIR/arch/arm64/boot/zImage
   - make k5fpr_defconfig 
-  - bash build.sh
+  #- bash mohan.sh
   - make -j16
   #- make ARCH=arm64 -j16 clean mrproper
 
