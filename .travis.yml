@@ -1,0 +1,55 @@
+language: c
+#######################################################################################
+os:
+  - linux
+  
+sudo: enabled
+
+addons:
+  apt:
+    packages:
+      - curl
+
+#######################################################################################
+
+
+before_install:
+
+  - sudo apt-get update -qq
+  
+  - git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 ~/aarch64-linux-android-4.9/
+  
+  - sudo chmod -R a+x *
+
+#######################################################################################
+
+
+script:  
+  
+  - export ARCH=arm64
+  - export ARCH_MTK_PLATFORM=mt6753
+  - export CROSS_COMPILE=~/aarch64-linux-android-4.9/bin/aarch64-linux-android-
+  
+  - KERNEL_DIR=$PWD/android_kernel_lenovo_A7010a48
+  - ZIMAGE=$KERNEL_DIR/arch/arm64/boot/zImage
+  - make k5fpr_defconfig 
+  - bash build.sh
+  - make -j16
+  #- make ARCH=arm64 -j16 clean mrproper
+
+after_success:
+  - curl --upload-file arch/arm64/boot/zImage https://transfer.sh/lenovo_A7010a48_kernel
+  
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key: "$GIT_OAUTH_TOKEN_TB"
+  
+  on:
+    tags: false
+    repo: ALGPHELLO/android_kernel_lenovo_A7010a48
+    branch: master
+
+branches:
+  except:
+    - /^(?i:untagged)-.*$/
