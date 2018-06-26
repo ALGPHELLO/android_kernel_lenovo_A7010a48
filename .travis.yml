@@ -46,9 +46,9 @@ deploy:
   api_key: "$GIT_OAUTH_TOKEN_TB"
   
   on:
-    tags: false
+    tags: true
     repo: ALGPHELLO/android_kernel_lenovo_A7010a48
-    branch: master
+    branch: LineageOS-15.0
 
 branches:
   except:
